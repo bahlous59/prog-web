@@ -1,0 +1,149 @@
+body{
+    background-image: url('num.jpg');
+}
+button{
+    width: 200px; /* Ancho del botón */
+    height: 75px; /* Alto del botón */
+    font-size: 21px; /* Tamaño de la fuente del botón */
+             
+    border-radius: 30px;
+    border: 3px solid black;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    transition: background-color 0.3s ease; /* Transición suave */
+}
+
+button:hover{
+    background-color: grey;
+    transform: scale(1.1);
+    border: 4px solid black;
+    
+}
+.fermer{
+    width: 60px; /* Ancho del botón */
+    height: 20px; /* Alto del botón */
+    font-size: 10px;
+    
+}
+
+.Vert{
+    color: green;            
+    font-weight: bold;}
+
+
+.Jaune{
+    color: #fddd5a;
+    font-weight: bold;}
+
+.Rouge{
+    color:red;
+    font-weight: bold;}
+
+.Hard{
+    background-color: red;}
+.Hard:hover{
+    background-color: #9B0505;}
+
+.Easy{
+    background-color: green;}
+    .Easy:hover{
+    background-color: #0F6310;}
+.Medium{
+    background-color:  #fddd5a;}
+    .Medium:hover{
+    background-color: #7D781E;}
+
+
+
+.container{
+    display: flex; 
+    margin: auto;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+    border-radius: 100px;       
+}
+.container2{
+    position: fixed;
+    bottom: 10px; 
+    left: 10px; 
+    padding: 10px 20px;
+    margin: auto;
+    justify-content: center;
+   
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+    border-radius: 100px;            
+}
+
+.help-menu {
+    display: none; /* Caché initialement */
+    position: fixed; /* Flottant sur la page */
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000; /* S'assurer qu'il est au-dessus des autres éléments */
+    background-color: white;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.soumettre{
+    width: 100px; /* Ancho del botón */
+    height: 50px; /* Alto del botón */
+    font-size: 18px;
+}
+.titre{
+    background-color: whitesmoke;
+    opacity: 0.8;
+    border-radius: 10px;
+    display: grid; 
+    text-align: center;
+    color:black;
+    font-weight: bold;
+    font-size: large;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    
+}
+.Separate{
+    width: 100%;
+    justify-content: center;
+    border-top: 5px solid #333; /* Estilo y color de la línea */
+    margin: 20px 0; /* Espacio alrededor de la línea */
+}
+
+.ball-result {
+    display: inline-block;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    margin: 5px; 
+    }
+.correct-position { background-color: green; }
+.correct-number { background-color: yellow; }
+.incorrect { background-color: red; }
+
+.number-input {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 24px;
+}
+
+.number-input-container {
+       display: inline-block;
+       position: absolute;
+       top: 50%;
+       left: 50%;
+       transform: translate(-50%, -50%);
+       margin: 5px;
+} 

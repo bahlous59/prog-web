@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+    <head>
+        <title>
+            testing styles 
+        </title>
+    </head>
+    <body>
+     <div class="number-input-container">
+      <input type="number" min="0" max="9" class="number-input" id="numberInput" oninput="limitToOneDigit(this)">
+      <input type="number" min="0" max="9" class="number-input" id="numberInput" oninput="limitToOneDigit(this)">
+      <input type="number" min="0" max="9" class="number-input" id="numberInput" oninput="limitToOneDigit(this)">
+      <input type="number" min="0" max="9" class="number-input" id="numberInput" oninput="limitToOneDigit(this)">
+     </div>
+      
+    </body>
+    <style>
+    .number-input {
+        width: 50px;
+        height: 50px;
+        border: 1px solid #ccc;
+        border-radius: 50%;
+        text-align: center;
+        font-size: 24px;
+    }
+
+    .number-input-container {
+           display: inline-block;
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           transform: translate(-50%, -50%);
+           margin: 5px;
+    } 
+
+     body{
+       background-image: url('download.jpg');
+    }  
+
+    
+    </style>
+
+<script>
+    let inputs = document.querySelectorAll('.number-input');
+
+    document.querySelectorAll('.number-input').forEach(input => {
+    input.addEventListener('input', roundNumbers);
+    input.addEventListener('input',validateInput);
+});
+
+function validateInput() {
+ inputs.forEach(input => { 
+       const value = parseInt(inputField.value);
+       if (value < 0 || value > 9) {
+       inputField.value = '';
+  }
+  });
+  
+}
+  function handleKeyPress(event) {
+  const charCode = event.which || event.keyCode;
+  if (!((charCode >= 48 && charCode <= 57) || charCode === 8 || charCode === 46)) {
+    event.preventDefault();
+  }
+}
+function roundNumber() {
+  inputs.forEach(input => {
+        let roundedValue = Math.ceil(input.value);
+        input.value = roundedValue;
+});
+}
+function limitToOneDigit(input) {
+    if (input.value.length > 1) {
+        input.value = input.value.slice(0, 1);
+    }
+}
+
+
+</script>
+</html>

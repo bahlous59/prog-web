@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<head>
+    <title>Nom du jeu - Facile</title>
+    <style>
+        .help-menu {
+            display: none; /* Caché initialement */
+            position: fixed; /* Flottant sur la page */
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000; /* S'assurer qu'il est au-dessus des autres éléments */
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);  
+        }
+
+        button {
+            background-color: #00CED1; 
+            color: white; 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 5px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
+            transition: background-color 0.3s, transform 0.3s; 
+        }
+
+        button:hover {
+            background-color: #008B8B; /* Couleur plus foncée au survol */
+            transform: translateY(-2px); /* Légère élévation au survol */
+        }
+
+        button:active {
+            transform: translateY(1px); /* Effet d'enfoncement lors du clic */
+        }   
+    </style>
+</head>
+<body>
+    <div style="border: 2px solid #008000; padding: 10px; background-color: #ccffcc; text-align: center;">
+        <p style="font-size: 24px; font-weight: bold; font-family: 'palatino', sans-serif; color: #333;">Essayez de trouver la combinaison des chiffres</p>
+        <p id="easyMode" style="font-size: 24px; font-weight: bold; font-family: 'palatino', sans-serif; color: #333;">Mode facile</p>
+    </div>     
+
+    <div id="helpMenu" class="help-menu">
+        <h2>Instructions du jeu</h2>
+        <p>Essayez de trouver tous les chiffres...</p>
+        <button onclick="toggleHelp()">Fermer</button>
+    </div>
+
+    <div id="inputArea" style="text-align: center;">
+        <!-- Boules pour saisir les chiffres -->
+        <div id="balls" style="margin: 10px;">
+            <!-- Générer les boules dynamiquement avec JavaScript -->
+        </div>
+        <button onclick="submitGuess()">Soumettre</button>
+    </div>
+
+    <div id="feedback" style="text-align: center;">
+        <!-- Feedback des tentatives sera affiché ici -->
+    </div>
+
+    <button onclick="checkNumber()">Vérifier</button>
+    <button onclick="toggleHelp()">Help</button>
+    <button onclick="restartGame()">Rejouer</button>
+    <button onclick="location.href='pagemenu.html'">Menu Principal</button>
+
+    <script>
+        var attempts = [];
+        var randomNumber; // Chiffre à deviner
+
+        document.addEventListener('DOMContentLoaded', function() {
+            generateBalls();
+            restartGame();
+        });
+
+        function generateBalls() {
+            const ballsContainer = document.getElementById('balls');
+            for (let i = 0; i < 4; i++) {
+                let ball = document.createElement('input');
+                ball.type = 'number';
+                ball.max = 9;
+                ball.min = 0;
+                ball.style.margin = '5px';
+                ballsContainer.appendChild(ball);
+            }
+        }
+
+        function submitGuess() {
+            const balls = document.getElementById('balls').getElementsByTagName('input');
+            let guess = '';
+            for (let ball of balls) {
+                guess += ball.value;
+            }
+            checkGuess(guess);
+        }
+
+        function checkGuess(guess) {
+    let feedback = '';
+    let correctPositions = 0; // Pour compter le nombre de chiffres bien placés
+
+    for (let i = 0; i < guess.length; i++) {
+        if (guess[i] === randomNumber[i]) {
+            feedback += '<span style="color: green;">' + guess[i] + '</span> ';
+            correctPositions++;
+        } else if (randomNumber.includes(guess[i])) {
+            feedback += '<span style="color: yellow;">' + guess[i] + '</span> ';
+        } else {
+            feedback += '<span style="color: red;">' + guess[i] + '</span> ';
+        }
+    }
+
+    // Enregistrer l'essai et le feedback
+    attempts.push({guess: guess, feedback: feedback});
+
+    // Mettre à jour le feedback sur la page
+    updateFeedback();
+
+    // Vérifier si l'utilisateur a gagné
+    if (correctPositions === 4) {
+        alert("Félicitations! Vous avez gagné!");
+        restartGame();
+    }
+}
+function updateFeedback() {
+    const feedbackElement = document.getElementById('feedback');
+    feedbackElement.innerHTML = ''; // Effacer les feedbacks précédents
+
+    // Parcourir toutes les tentatives et les afficher
+    for (let attempt of attempts) {
+        let attemptElement = document.createElement('div');
+        attemptElement.innerHTML = attempt.guess + ' - ' + attempt.feedback;
+        feedbackElement.appendChild(attemptElement);
+    }
+}
+        function restartGame() {
+            randomNumber = generateRandomNumber(4);
+            const balls = document.getElementById('balls').getElementsByTagName('input');
+            for (let ball of balls) {
+                ball.value = '';
+            }
+            document.getElementById('feedback').innerHTML = '';
+            randomNumber = generateRandomNumber(4);
+            attempts = [];
+            updateFeedback();
+        }
+
+        function generateRandomNumber(length) {
+            let number = '';
+            for (let i = 0; i < length; i++) {
+                number += Math.floor(Math.random() * 10).toString();
+            }
+            return number;
+        }
+
+        function toggleHelp() {
+            const helpMenu = document.getElementById('helpMenu');
+            helpMenu.style.display = helpMenu.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>

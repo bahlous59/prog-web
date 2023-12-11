@@ -3,12 +3,12 @@
     <title>Nom du jeu - Facile</title>
     <style>
         .help-menu {
-            display: none; /* Caché initialement */
-            position: fixed; /* Flottant sur la page */
+            display: none; 
+            position: fixed; 
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            z-index: 1000; /* S'assurer qu'il est au-dessus des autres éléments */
+            z-index: 1000; 
             background-color: white;
             padding: 20px;
             border: 1px solid #ccc;
@@ -31,13 +31,27 @@
         }
 
         button:hover {
-            background-color: #008B8B; /* Couleur plus foncée au survol */
-            transform: translateY(-2px); /* Légère élévation au survol */
+            background-color: #008B8B; 
+            transform: translateY(-2px);
         }
 
         button:active {
-            transform: translateY(1px); /* Effet d'enfoncement lors du clic */
+            transform: translateY(1px); 
         }   
+        .ball-result {
+        display: inline-block;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        line-height: 25px;
+        text-align: center;
+        color: white;
+        font-weight: bold;
+        margin: 5px; 
+        }
+    .correct-position { background-color: green; }
+    .correct-number { background-color: yellow; }
+    .incorrect { background-color: red; }
     </style>
 </head>
 <body>
@@ -49,29 +63,28 @@
     <div id="helpMenu" class="help-menu">
         <h2>Instructions du jeu</h2>
         <p>Essayez de trouver tous les chiffres...</p>
-        <button onclick="toggleHelp()">Fermer</button>
+        <button onclick="help_bot()">Fermer</button>
     </div>
 
     <div id="inputArea" style="text-align: center;">
         <!-- Boules pour saisir les chiffres -->
-        <div id="balls" style="margin: 10px;">
-            <!-- Générer les boules dynamiquement avec JavaScript -->
-        </div>
-        <button onclick="submitGuess()">Soumettre</button>
+        <div id="balls" style="margin: 10px;"></div>
+        <button onclick="inserer_tentative()">Soumettre</button>
     </div>
 
-    <div id="feedback" style="text-align: center;">
-        <!-- Feedback des tentatives sera affiché ici -->
+    <div id="sauvegard" style="text-align: center;">
+        <!-- sauvegard des tentative sera affiché ici -->
     </div>
 
     <button onclick="checkNumber()">Vérifier</button>
-    <button onclick="toggleHelp()">Help</button>
+    <button onclick="help_bot()">Help</button>
     <button onclick="restartGame()">Rejouer</button>
-    <button onclick="location.href='pagemenu.html'">Menu Principal</button>
+    <button onclick="location.href='menu.html'">Menu Principal</button>
 
     <script>
         var attempts = [];
         var randomNumber; // Chiffre à deviner
+        var maxAttempts = 8;
 
         document.addEventListener('DOMContentLoaded', function() {
             generateBalls();
@@ -85,70 +98,77 @@
                 ball.type = 'number';
                 ball.max = 9;
                 ball.min = 0;
-                ball.style.margin = '5px';
+                ball.style.margin = '5px';help_bot
                 ballsContainer.appendChild(ball);
             }
         }
 
-        function submitGuess() {
+        function inserer_tentative() {
+            if (attempts.length >= maxAttempts) {
+        alert("Nombre maximal de tentatives atteintes !");
+        return; 
+        }
             const balls = document.getElementById('balls').getElementsByTagName('input');
-            let guess = '';
+            let tentative = '';
             for (let ball of balls) {
-                guess += ball.value;
+                tentative += ball.value;
             }
-            checkGuess(guess);
+            check_tentative(tentative);
         }
 
-        function checkGuess(guess) {
-    let feedback = '';
-    let correctPositions = 0; // Pour compter le nombre de chiffres bien placés
+        function check_tentative(tentative) {
+    let sauvegard = '';
+    let correctPositions = 0; 
 
-    for (let i = 0; i < guess.length; i++) {
-        if (guess[i] === randomNumber[i]) {
-            feedback += '<span style="color: green;">' + guess[i] + '</span> ';
+    for (let i = 0; i < tentative.length; i++) {
+        let ballClass = 'incorrect'; 
+        if (tentative[i] === randomNumber[i]) {
+            ballClass = 'correct-position'; 
             correctPositions++;
-        } else if (randomNumber.includes(guess[i])) {
-            feedback += '<span style="color: yellow;">' + guess[i] + '</span> ';
-        } else {
-            feedback += '<span style="color: red;">' + guess[i] + '</span> ';
+        } else if (randomNumber.includes(tentative[i])) {
+            ballClass = 'correct-number'; 
         }
+        sauvegard += '<div class="ball-result ' + ballClass + '">' + tentative[i] + '</div> ';
+        if (attempts.length >= maxAttempts) {
+        alert("Vous avez atteint le nombre maximal de tentatives !");
+    }
     }
 
     // Enregistrer l'essai et le feedback
-    attempts.push({guess: guess, feedback: feedback});
+    attempts.push({tentative: tentative, sauvegard: sauvegard});
 
     // Mettre à jour le feedback sur la page
     updateFeedback();
 
-    // Vérifier si l'utilisateur a gagné
+    // Vérifier si l'utilisateur a gagné ou il a dépassé le nombre de tentatives 
     if (correctPositions === 4) {
         alert("Félicitations! Vous avez gagné!");
         restartGame();
+    } else if (attempts.length >= maxAttempts) {
+        alert("Nombre maximal de tentatives atteint. VOUS AVEZ PERDU.");
+        restartGame();
     }
 }
-function updateFeedback() {
-    const feedbackElement = document.getElementById('feedback');
-    feedbackElement.innerHTML = ''; // Effacer les feedbacks précédents
 
+    function updateFeedback() {
+    const sauvegardElement = document.getElementById('sauvegard');
+    sauvegardElement.innerHTML = ''; // Effacer les feedbacks précédents
     // Parcourir toutes les tentatives et les afficher
     for (let attempt of attempts) {
         let attemptElement = document.createElement('div');
-        attemptElement.innerHTML = attempt.guess + ' - ' + attempt.feedback;
-        feedbackElement.appendChild(attemptElement);
+        attemptElement.innerHTML = attempt.tentative + ' - ' + attempt.sauvegard;
+        sauvegardElement.appendChild(attemptElement);
     }
 }
-        function restartGame() {
-            randomNumber = generateRandomNumber(4);
-            const balls = document.getElementById('balls').getElementsByTagName('input');
-            for (let ball of balls) {
-                ball.value = '';
-            }
-            document.getElementById('feedback').innerHTML = '';
-            randomNumber = generateRandomNumber(4);
-            attempts = [];
-            updateFeedback();
-        }
-
+function restartGame() {
+    randomNumber = generateRandomNumber(4);
+    const balls = document.getElementById('balls').getElementsByTagName('input');
+    for (let ball of balls) {
+        ball.value = '';
+    }
+    attempts = [];
+    updateFeedback();
+}
         function generateRandomNumber(length) {
             let number = '';
             for (let i = 0; i < length; i++) {
@@ -157,7 +177,7 @@ function updateFeedback() {
             return number;
         }
 
-        function toggleHelp() {
+        function help_bot() {
             const helpMenu = document.getElementById('helpMenu');
             helpMenu.style.display = helpMenu.style.display === 'none' ? 'block' : 'none';
         }
